@@ -1,0 +1,78 @@
+version: '3.9'
+
+services:
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql-auth
+      - rabbitmq
+    env_file:
+      - ./auth-service/.env
+    volumes:
+      - ./auth-service:/app
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "8082:8080"
+    depends_on:
+      - postgres-user
+      - rabbitmq
+    env_file:
+      - ./user-service/.env
+    volumes:
+      - ./user-service:/app
+
+  mysql-auth:
+    image: mysql:8
+    container_name: mysql-auth
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: auth_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_auth_data:/var/lib/mysql
+
+  postgres-user:
+    image: postgres:17-alpine
+    container_name: postgres-user
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: user_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_user_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-auth
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # aplikasi
+      - "15672:15672" # dashboard
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  mysql_auth_data:
+  postgres_user_data:
+  redis_data:
+  rabbitmq_data:

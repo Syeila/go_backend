@@ -1,0 +1,13 @@
+CREATE TABLE refresh_tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token TEXT NOT NULL,
+    expired_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE refresh_tokens
+ADD COLUMN device_name VARCHAR(255),
+ADD COLUMN ip_address VARCHAR(255),
+ADD COLUMN user_agent TEXT,
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;

@@ -1,0 +1,255 @@
+basePath: /
+definitions:
+  dto.LoginRequest:
+    properties:
+      device_name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.LogoutRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  dto.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: Auth Microservice API
+  title: Auth Service API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login user and get JWT token
+      parameters:
+      - description: Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login User
+      tags:
+      - Auth
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout and revoke refresh token
+      parameters:
+      - description: Logout Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Logout User
+      tags:
+      - Auth
+  /profile:
+    get:
+      description: Get current user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: User Profile
+      tags:
+      - User
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: Generate new access token using refresh token
+      parameters:
+      - description: Refresh Token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Refresh Access Token
+      tags:
+      - Auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: Register Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register User
+      tags:
+      - Auth
+  /sessions:
+    get:
+      consumes:
+      - application/json
+      description: Get all active sessions for current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get User Sessions
+      tags:
+      - Auth
+  /users:
+    get:
+      description: Get current all user
+      parameters:
+      - description: Page Number
+        in: query
+        name: page
+        type: integer
+      - description: Limit Data
+        in: query
+        name: limit
+        type: integer
+      - description: Search Name or Email
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get All User
+      tags:
+      - Auth
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete User
+      tags:
+      - Auth
+    put:
+      consumes:
+      - application/json
+      description: Update existing user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update User Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update User
+      tags:
+      - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
