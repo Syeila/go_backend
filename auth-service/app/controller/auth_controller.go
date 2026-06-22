@@ -338,7 +338,7 @@ func DeleteUser(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "invalid id",
+			"message": "invalid user id",
 		})
 		return
 	}
