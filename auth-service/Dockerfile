@@ -1,13 +1,14 @@
-FROM golang:1.25-alpine
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
-
-RUN go install github.com/air-verse/air@latest
-
 COPY . .
 
 RUN go mod tidy
+RUN go build -o app .
 
-EXPOSE 8080
+FROM alpine:latest
 
-CMD ["air"]
+WORKDIR /app
+COPY --from=builder /app/app .
+
+CMD ["./app"]
