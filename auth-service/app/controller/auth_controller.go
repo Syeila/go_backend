@@ -330,7 +330,6 @@ func UpdateUser(c *gin.Context) {
 // @Success 200 {object} map[string]interface{}
 // @Router /users/{id} [delete]
 func DeleteUser(c *gin.Context) {
-	fmt.Println(test)
 
 	idStr := c.Param("id")
 
