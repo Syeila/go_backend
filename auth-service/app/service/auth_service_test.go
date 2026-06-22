@@ -20,7 +20,7 @@ func TestPasswordHash(t *testing.T) {
 	}
 
 	if string(hash) == password {
-		t.Fatal("hash should not equal original password")
+		t.Fatal("hash should not equal original password.")
 	}
 }
 
