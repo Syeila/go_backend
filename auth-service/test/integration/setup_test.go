@@ -30,7 +30,7 @@ func TestMain(m *testing.M) {
 	// Seed User
 	seedUser()
 
-	log.Println(">>> TEST MAIN RUNNING")
+	log.Println(">> TEST MAIN RUNNING")
 
 	// Setup Gin
 	gin.SetMode(gin.TestMode)
