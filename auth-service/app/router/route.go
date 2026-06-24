@@ -14,7 +14,8 @@ import (
 func SetupRouter(r *gin.Engine) {
 
 	r.POST("/register", controller.Register)
-	r.POST("/login", middleware.LoginRateLimit(), controller.Login)
+	//r.POST("/login", middleware.LoginRateLimit(), controller.Login)
+	r.POST("/login", controller.Login)
 	r.POST("/refresh", controller.RefreshToken)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/users", controller.GetUsers)
